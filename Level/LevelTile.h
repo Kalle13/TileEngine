@@ -18,8 +18,7 @@ namespace Tile
 }
 
 
-class LevelTile : public sf::Drawable
-{
+class LevelTile : public sf::Drawable{
 public:
 
    LevelTile(unsigned initTileIndex, sf::Vector2f initTilePosition, Tile::Type initTileType,
@@ -28,43 +27,30 @@ public:
                 tilePosition(initTilePosition),
                 tileType(initTileType),
                 tileColor1(initTileColor1),
-                tileColor2(initTileColor2) {}
+                tileColor2(initTileColor2)
+   {}
+   void           SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2);
+   void           SetTilePosition(sf::Vector2f newTilePosition);
+   void           UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor);
+   void           UpdateTileRectangleColor(sf::Color newRectColor);
 
-   void SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2)
-   {
-      tileColor1 = newTileColor1;
-      tileColor2 = newTileColor2;
-      UpdateTileRectangleColor();
-   }
-   void SetTilePosition(sf::Vector2f newTilePosition){tilePosition = newTilePosition;}
-   void UpdateTileRectangle();
-   void UpdateTileRectangleColor();
+   sf::Color      GetTileColor(){return tileColor;}
+   sf::Vector2f   GetTilePosition(){return tilePosition;}
 
-   sf::Color GetTileColor(){return tileColor;}
-   sf::Vector2f GetTilePosition(){return tilePosition;}
+   bool           TestVectorCollision(sf::Vector2f testVector);
+   bool           TestRectangleCollision(sf::FloatRect floatRect);
 
-   bool TestEntityCollision(sf::FloatRect entityFloatRect)
-   {
-      if(tileRectangle.getGlobalBounds().intersects(entityFloatRect)){
-         entityCollisionFlag = true;
-         return true;
-      } else {
-         entityCollisionFlag = false;
-         return false;
-      }
-   }
-
-   Tile::Type GetTileType(){return tileType;}
-   virtual void UpdateTile();
+   Tile::Type     GetTileType(){return tileType;}
+   virtual void   UpdateTile();
 
 protected:
 
-   unsigned tileIndex;     // Tile index helpful for when tiles need to act upon one another
-   sf::Vector2f tilePosition;
-   Tile::Type tileType;
-   sf::Color tileColor1;
-   sf::Color tileColor2;
-   sf::RectangleShape tileRectangle;
+   unsigned             tileIndex;     // Tile index helpful for when tiles need to act upon one another
+   sf::Vector2f         tilePosition;
+   Tile::Type           tileType;
+   sf::Color            tileColor1;
+   sf::Color            tileColor2;
+   sf::RectangleShape   tileRectangle;
 
 private:
 
@@ -75,8 +61,7 @@ private:
 };
 
 
-class BaseTile : LevelTile
-{
+class BaseTile : LevelTile{
 public:
 
    BaseTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
@@ -93,8 +78,7 @@ private:
 };
 
 
-class WallTile : LevelTile
-{
+class WallTile : LevelTile{
 public:
 
    WallTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
@@ -116,8 +100,7 @@ private:
 };
 
 
-class GateTile : LevelTile
-{
+class GateTile : LevelTile{
 public:
 
    GateTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
@@ -126,27 +109,27 @@ public:
                LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
                gateOpen(initGateState)
    {}
-   //Tile::Type GetTileType() override {return Tile::Type::Gate;}
-   void UpdateTile() override;
+   //Tile::Type   GetTileType() override {return Tile::Type::Gate;}
+   void           UpdateTile() override;
 
-   bool GetGateState(){return gateOpen;}
-   unsigned GetLevelDestination(){return levelDestination;}           // Returns level number of gate destination (for inter-level gates)
-   sf::Vector2f GetLocationDestination(){return locationDestination;}    // Returns position of gate destination (for intra-level gates)
+   bool           GetGateState()             {return gateOpen;}
+   unsigned       GetLevelDestination()      {return levelDestination;}          // Returns level number of gate destination (for inter-level gates)
+   sf::Vector2f   GetLocationDestination()   {return locationDestination;}       // Returns position of gate destination (for intra-level gates)
 
-   void SetGateState(bool gateIsOpen){gateOpen = gateIsOpen;}
-   void SetLevelDestination(unsigned newLevel){levelDestination = newLevel;}
-   void SetLocationDestination(sf::Vector2f newLocation){locationDestination = newLocation;}
+   void           SetGateState(bool gateIsOpen)                      {gateOpen = gateIsOpen;}
+   void           SetLevelDestination(unsigned newLevel)             {levelDestination = newLevel;}
+   void           SetLocationDestination(sf::Vector2f newLocation)   {locationDestination = newLocation;}
 
 private:
 
-   unsigned levelDestination;          // Level to send player
-   bool gateOpen;
-   sf::Vector2f locationDestination;   // Location in level to send player
+   unsigned       levelDestination;          // Level to send player (can be same as current level number if gate "warps" player)
+   bool           gateOpen;
+   sf::Vector2f   locationDestination;       // Location in level to send player
 
 };
 
-class SwitchTile : LevelTile
-{
+
+class SwitchTile : LevelTile{
 public:
 
    SwitchTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
@@ -157,16 +140,16 @@ public:
    {}
    ~SwitchTile(){delete[] switchedTileIndexes;}
    //Tile::Type GetTileType() override {return Tile::Type::Switch;}
-   void UpdateTile() override;
+   void     UpdateTile() override;
 
-   void SetSwitchState(bool switchState);
-   void SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);
-   bool GetSwitchState(){return switchState;}
+   void     SetSwitchState(bool switchState);
+   void     SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);
+   bool     GetSwitchState(){return switchState;}
 
 private:
 
-   bool switchState;
-   unsigned *switchedTileIndexes;   // Tile indexes can correspond to Wall and Gate tiles to turn a Wall off, and/or to open/close a gate
+   bool        switchState;
+   unsigned    *switchedTileIndexes;   // Tile indexes can correspond to Wall and Gate tiles to turn a Wall off, and/or to open/close a gate
 
 };
 

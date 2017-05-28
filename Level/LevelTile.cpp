@@ -9,20 +9,45 @@ void LevelTile::UpdateTileRectangle()
 }
 
 
-void LevelTile::UpdateTileRectangleColor()
+void LevelTile::SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2)
 {
-   tileRectangle.setFillColor(tileColor);
+   tileColor1 = newTileColor1;
+   tileColor2 = newTileColor2;
+   UpdateTileRectangleColor();
+}
+
+
+void LevelTile::SetTilePosition(sf::Vector2f newTilePosition)
+{
+   tilePosition = newTilePosition;
+}
+
+
+void LevelTile::UpdateTileRectangleColor(sf::Color newRectColor)
+{
+   tileRectangle.setFillColor(newRectColor);
+}
+
+
+bool LevelTile::TestVectorCollision(sf::Vector2f testVector)
+{
+   return tileRectangle.getGlobalBounds().contains(testVector);
+}
+
+
+bool LevelTile::TestRectangleCollision(sf::FloatRect floatRect)
+{
+   return tileRectangle.getGlobalBounds().intersects(floatRect);
 }
 
 
 void BaseTile::UpdateTile()
 {
    if(entityCollisionFlag){
-      tileColor = entityCollisionColor;
+      UpdateTileRectangle(tileColor1);
    } else {
-      tileColor = noEntityCollisionColor;
+      UpdateTileRectangle(tileColor2);
    }
-   UpdateTileRectangleColor();
 }
 
 
