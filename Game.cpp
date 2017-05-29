@@ -52,11 +52,17 @@ void Game::ProcessEvents()
 void Game::Update(float deltaT)
 {
 
+   if(level.GetLevelNumber() != 0){
+      printf("Do we get here?\n");
+      level.UpdateLevel(0);
+      printf("Or here?\n");
+   }
+
 }
 
 void Game::Render()
 {
    window.clear(sf::Color::Black);
-
+   window.draw(level);
    window.display();
 }

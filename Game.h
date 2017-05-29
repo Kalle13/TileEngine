@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <cmath>
 
+#include "Level/Level.h"
 #include "UserInterface/UserInput.h"
 
 class Game
@@ -16,6 +17,7 @@ public:
 
    sf::RenderWindow window;
    UserInput userInput;
+   Level level;
 
    Game();
    ~Game();

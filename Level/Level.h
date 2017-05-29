@@ -8,39 +8,50 @@
 #include <stdio.h>
 #include <cmath>
 #include <assert.h>
+
 #include "LevelTile.h"
 #include "TileFactory.h"
-#include "LevelData.h"
 
 class Level : public sf::Drawable
 {
 public:
 
+   Level() : numberOfTiles(0) {};
    Level(unsigned initLevelNumber) : levelNumber(initLevelNumber), numberOfTiles(0) {}
    ~Level()
    {
       delete[] tilePositions;
-      delete[] tileColors;
+      delete[] tileColors1;
+      delete[] tileColors2;
       delete[] tileTypes;
-      delete[] levelTiles;
+      delete[] tileStates;
+      for(unsigned i=0;i<numberOfTiles;++i){
+         delete levelTiles[i];      // Delete pointers first
+      }
+      delete[] levelTiles;          // Delete array second
    }
-   bool SetLevelNumber(unsigned newLevelNumber);
-   unsigned GetLevelNumber(){return levelNumber;}
+   unsigned    GetLevelNumber(){return levelNumber;}
 
-   // Functions to run after changing level number
-   bool InitializeLevel();
-   bool GetTilePositions();
-   bool GetTileTypes();
-   bool GetTileColors();
+   // Functions to change levels
+   bool        UpdateLevel(unsigned nextLevelNumber);
+
+   // Tile-related functions
+   void        LevelUpdateTiles(sf::Vector2f entityPosition, bool useKeyPressed);
+
+public:
+
+   TileFactory tileFactory;
 
 private:
 
    unsigned levelNumber;
    unsigned numberOfTiles;
    sf::Vector2f *tilePositions;
-   sf::Color *tileColors;
+   sf::Color *tileColors1;
+   sf::Color *tileColors2;
    Tile::Type *tileTypes;
-   LevelTile **levelTiles; // Array of pointers for derived tile types (create array with 'new')
+   bool *tileStates;
+   LevelTile* *levelTiles; // Array of pointers for derived tile types (create array with 'new')
 
 private:
 
@@ -48,7 +59,7 @@ private:
    {
       for(unsigned i=0;i<numberOfTiles;++i)
       {
-         target.draw(levelTiles[i]);
+         target.draw(*(levelTiles[i]));
       }
    }
 

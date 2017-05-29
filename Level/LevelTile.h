@@ -28,20 +28,28 @@ public:
                 tileType(initTileType),
                 tileColor1(initTileColor1),
                 tileColor2(initTileColor2)
-   {}
+   {
+      tileRectangle.setSize(sf::Vector2f(TILE_WIDTH,TILE_HEIGHT));
+      tileRectangle.setFillColor(initTileColor1);
+      tileRectangle.setOrigin(TILE_WIDTH/2,TILE_HEIGHT/2);
+      tileRectangle.setPosition(initTilePosition);
+   }
+   virtual ~LevelTile() {};
    void           SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2);
    void           SetTilePosition(sf::Vector2f newTilePosition);
    void           UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor);
    void           UpdateTileRectangleColor(sf::Color newRectColor);
+   void           ToggleTileColor();
 
-   sf::Color      GetTileColor(){return tileColor;}
-   sf::Vector2f   GetTilePosition(){return tilePosition;}
+   sf::Color      GetTileColor1()      {return tileColor1;}
+   sf::Color      GetTileColor2()      {return tileColor2;}
+   sf::Vector2f   GetTilePosition()    {return tilePosition;}
 
    bool           TestVectorCollision(sf::Vector2f testVector);
    bool           TestRectangleCollision(sf::FloatRect floatRect);
 
-   Tile::Type     GetTileType(){return tileType;}
-   virtual void   UpdateTile();
+   Tile::Type     GetTileType()        {return tileType;}
+   virtual void   UpdateTile() = 0;
 
 protected:
 
@@ -61,27 +69,23 @@ private:
 };
 
 
-class BaseTile : LevelTile{
+class BaseTile : public LevelTile{
 public:
 
-   BaseTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
+   BaseTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2) :
             LevelTile(initTileIndex, initTilePosition, Tile::Base, initTileColor1, initTileColor2)
    {}
    //Tile::Type GetTileType() override {return Tile::Type::Base;}
    void UpdateTile() override;
 
-private:
-
-   bool entityCollisionFlag;
-
 };
 
 
-class WallTile : LevelTile{
+class WallTile : public LevelTile{
 public:
 
-   WallTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
+   WallTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2,
             bool wallTileEnabled) :
                LevelTile(initTileIndex, initTilePosition, Tile::Wall, initTileColor1, initTileColor2),
@@ -92,6 +96,7 @@ public:
 
    bool GetWallState(){return wallEnabled;}
    void SetWallState(bool setWallEnabled){wallEnabled = setWallEnabled;}    // Used to enable/disable a wall from a switch
+   void ToggleWallState();
 
 private:
 
@@ -100,10 +105,10 @@ private:
 };
 
 
-class GateTile : LevelTile{
+class GateTile : public LevelTile{
 public:
 
-   GateTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
+   GateTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2,
             bool initGateState) :
                LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
@@ -119,6 +124,7 @@ public:
    void           SetGateState(bool gateIsOpen)                      {gateOpen = gateIsOpen;}
    void           SetLevelDestination(unsigned newLevel)             {levelDestination = newLevel;}
    void           SetLocationDestination(sf::Vector2f newLocation)   {locationDestination = newLocation;}
+   void           ToggleGateState();
 
 private:
 
@@ -129,10 +135,10 @@ private:
 };
 
 
-class SwitchTile : LevelTile{
+class SwitchTile : public LevelTile{
 public:
 
-   SwitchTile(sf::Vector2f initTilePosition, unsigned initTileIndex,
+   SwitchTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
               sf::Color initTileColor1, sf::Color initTileColor2,
               bool initSwitchState) :
                  LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
@@ -140,16 +146,18 @@ public:
    {}
    ~SwitchTile(){delete[] switchedTileIndexes;}
    //Tile::Type GetTileType() override {return Tile::Type::Switch;}
-   void     UpdateTile() override;
+   void        UpdateTile() override;
 
-   void     SetSwitchState(bool switchState);
-   void     SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);
-   bool     GetSwitchState(){return switchState;}
+   void        SetSwitchState(bool switchState);
+   void        SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);
+   bool        GetSwitchState(){return switchState;}
+   void        ToggleSwitchState();
 
 private:
 
+   unsigned    numSwitchedTiles;
    bool        switchState;
-   unsigned    *switchedTileIndexes;   // Tile indexes can correspond to Wall and Gate tiles to turn a Wall off, and/or to open/close a gate
+   unsigned    *switchedTileIndexes;   // Tile indexes can correspond to Wall, Gate, or other Switch tiles to turn a Wall off, open/close a gate, or toggle another switch
 
 };
 

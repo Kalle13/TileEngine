@@ -1,6 +1,6 @@
 #include "UserInput.h"
 
-void UserInput::SetInputState(sf::Keyboard key, bool isKeyPressed)
+void UserInput::SetInputState(sf::Keyboard::Key key, bool isKeyPressed)
 {
    switch(key)
    {
@@ -27,7 +27,7 @@ void UserInput::SetInputState(sf::Keyboard key, bool isKeyPressed)
    }
 }
 
-bool UserInput::GetKeyState(sf::Keyboard key)
+bool UserInput::GetKeyState(sf::Keyboard::Key key)
 {
    switch(key)
    {
@@ -44,6 +44,8 @@ bool UserInput::GetKeyState(sf::Keyboard key)
    case sf::Keyboard::Escape:
       return escapeKey;
    default:
-      break;
+      return false;
    }
+
+   return false;
 }

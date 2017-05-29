@@ -21,9 +21,9 @@ public:
    };
 
    UserInput() : keyboardFlags(0), wKey(false), aKey(false), sKey(false), dKey(false), spaceKey(false), escapeKey(false) {}
-   void SetInputState(sf::Keyboard key, bool isKeyPressed);
-   unsigned GetInputState(){return keyboardFlags;}
-   bool GetKeyState(sf::Keyboard key);
+   void        SetInputState(sf::Keyboard::Key key, bool isKeyPressed);
+   unsigned    GetInputState(){return keyboardFlags;}
+   bool        GetKeyState(sf::Keyboard::Key key);
 
 private:
 
