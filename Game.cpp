@@ -3,6 +3,7 @@
 Game::Game()
 {
    printf("Game constructor\n");
+   timeAccumulator = 0;
 }
 
 Game::~Game()
@@ -57,6 +58,17 @@ void Game::Update(float deltaT)
       level.UpdateLevel(0);
       printf("Or here?\n");
    }
+
+   timeAccumulator += deltaT;
+   if(timeAccumulator>1.0){
+      level.LevelUpdateTiles(sf::Vector2f(0,0),false);
+      timeAccumulator = 0;
+   }
+
+}
+
+void Game::GameLogic(float deltaT)
+{
 
 }
 

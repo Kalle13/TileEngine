@@ -18,22 +18,12 @@ public:
 
    Level() : numberOfTiles(0) {};
    Level(unsigned initLevelNumber) : levelNumber(initLevelNumber), numberOfTiles(0) {}
-   ~Level()
-   {
-      delete[] tilePositions;
-      delete[] tileColors1;
-      delete[] tileColors2;
-      delete[] tileTypes;
-      delete[] tileStates;
-      for(unsigned i=0;i<numberOfTiles;++i){
-         delete levelTiles[i];      // Delete pointers first
-      }
-      delete[] levelTiles;          // Delete array second
-   }
+   ~Level();
+
    unsigned    GetLevelNumber(){return levelNumber;}
 
    // Functions to change levels
-   bool        UpdateLevel(unsigned nextLevelNumber);
+   bool        ChangeLevel(unsigned nextLevelNumber);
 
    // Tile-related functions
    void        LevelUpdateTiles(sf::Vector2f entityPosition, bool useKeyPressed);
@@ -44,14 +34,18 @@ public:
 
 private:
 
-   unsigned levelNumber;
-   unsigned numberOfTiles;
-   sf::Vector2f *tilePositions;
-   sf::Color *tileColors1;
-   sf::Color *tileColors2;
-   Tile::Type *tileTypes;
-   bool *tileStates;
-   LevelTile* *levelTiles; // Array of pointers for derived tile types (create array with 'new')
+   unsigned       levelNumber;
+   unsigned       numberOfTiles;                // Total number of tiles in level
+   unsigned       numberOfSwitchTiles;          // Total number of switch tiles in level
+   unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
+   unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
+   unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
+   sf::Vector2f   *tilePositions;
+   sf::Color      *tileColors1;
+   sf::Color      *tileColors2;
+   Tile::Type     *tileTypes;
+   bool           *tileStates;
+   LevelTile      **levelTiles;                 // Array of pointers for derived tile types (create array with 'new')
 
 private:
 

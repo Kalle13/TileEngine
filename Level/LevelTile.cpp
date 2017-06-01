@@ -59,6 +59,14 @@ void BaseTile::UpdateTile()
    }
 }
 
+void BaseTile::ToggleTile()
+{
+   if(tileRectangle.getFillColor() == tileColor1){
+      tileRectangle.setFillColor(tileColor2);
+   } else {
+      tileRectangle.setFillColor(tileColor1);
+   }
+}
 
 /*******************************  Wall  Tile   *******************************/
 void WallTile::UpdateTile()
@@ -68,6 +76,11 @@ void WallTile::UpdateTile()
    } else {
       UpdateTileRectangleColor(tileColor2);
    }
+}
+
+void WallTile::ToggleTile()
+{
+   ToggleWallState();
 }
 
 void WallTile::ToggleWallState()
@@ -89,6 +102,11 @@ void GateTile::UpdateTile()
    }
 }
 
+void GateTile::ToggleTile()
+{
+   ToggleGateState();
+}
+
 void GateTile::ToggleGateState()
 {
    if(gateOpen){
@@ -108,8 +126,17 @@ void SwitchTile::UpdateTile()
    }
 }
 
+void SwitchTile::ToggleTile()
+{
+   ToggleSwitchState();
+}
+
 void SwitchTile::SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes)
 {
+   if(numSwitchedTiles>0){                // Delete old array of switched tile indexes first!
+      delete[] switchedTileIndexes;
+   }
+
    numSwitchedTiles = numTileIndexes;
 
    if(numSwitchedTiles>0){

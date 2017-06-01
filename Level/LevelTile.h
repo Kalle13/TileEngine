@@ -50,6 +50,7 @@ public:
 
    Tile::Type     GetTileType()        {return tileType;}
    virtual void   UpdateTile() = 0;
+   virtual void   ToggleTile() = 0;
 
 protected:
 
@@ -78,6 +79,7 @@ public:
    {}
    //Tile::Type GetTileType() override {return Tile::Type::Base;}
    void UpdateTile() override;
+   void ToggleTile() override;
 
 };
 
@@ -93,6 +95,7 @@ public:
    {}
    //Tile::Type GetTileType() override {return Tile::Type::Wall;}
    void UpdateTile() override;
+   void ToggleTile() override;
 
    bool GetWallState(){return wallEnabled;}
    void SetWallState(bool setWallEnabled){wallEnabled = setWallEnabled;}    // Used to enable/disable a wall from a switch
@@ -116,6 +119,7 @@ public:
    {}
    //Tile::Type   GetTileType() override {return Tile::Type::Gate;}
    void           UpdateTile() override;
+   void           ToggleTile() override;
 
    bool           GetGateState()             {return gateOpen;}
    unsigned       GetLevelDestination()      {return levelDestination;}          // Returns level number of gate destination (for inter-level gates)
@@ -143,10 +147,13 @@ public:
               bool initSwitchState) :
                  LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
                  switchState(initSwitchState)
-   {}
+   {
+      numSwitchedTiles = 0;
+   }
    ~SwitchTile(){delete[] switchedTileIndexes;}
    //Tile::Type GetTileType() override {return Tile::Type::Switch;}
    void        UpdateTile() override;
+   void        ToggleTile() override;
 
    void        SetSwitchState(bool switchState);
    void        SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);
@@ -155,8 +162,8 @@ public:
 
 private:
 
-   unsigned    numSwitchedTiles;
-   bool        switchState;
+   unsigned    numSwitchedTiles;       // Number of tiles associated with specific SwitchTile; these associated tiles will be toggled when their SwitchTile is toggled by the player
+   bool        switchState;            // The current state of the SwitchTile
    unsigned    *switchedTileIndexes;   // Tile indexes can correspond to Wall, Gate, or other Switch tiles to turn a Wall off, open/close a gate, or toggle another switch
 
 };

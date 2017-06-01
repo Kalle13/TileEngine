@@ -18,6 +18,7 @@ public:
    sf::RenderWindow window;
    UserInput userInput;
    Level level;
+   float timeAccumulator;
 
    Game();
    ~Game();
@@ -25,6 +26,7 @@ public:
    void GameLoop();
    void ProcessEvents();
    void Update(float deltaT);
+   void GameLogic(float deltaT);
    void Render();
 };
 
