@@ -145,7 +145,7 @@ public:
    SwitchTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
               sf::Color initTileColor1, sf::Color initTileColor2,
               bool initSwitchState) :
-                 LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
+                 LevelTile(initTileIndex, initTilePosition, Tile::Switch, initTileColor1, initTileColor2),
                  switchState(initSwitchState)
    {
       numSwitchedTiles = 0;

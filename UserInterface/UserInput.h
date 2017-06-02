@@ -20,7 +20,7 @@ public:
       Escape = 0x14
    };
 
-   UserInput() : keyboardFlags(0), wKey(false), aKey(false), sKey(false), dKey(false), spaceKey(false), escapeKey(false) {}
+   UserInput() : keyboardFlags(0), wKey(false), aKey(false), sKey(false), dKey(false), eKey(false), spaceKey(false), escapeKey(false) {}
    void        SetInputState(sf::Keyboard::Key key, bool isKeyPressed);
    unsigned    GetInputState(){return keyboardFlags;}
    bool        GetKeyState(sf::Keyboard::Key key);
@@ -32,6 +32,7 @@ private:
    bool aKey;
    bool sKey;
    bool dKey;
+   bool eKey;
    bool spaceKey;
    bool escapeKey;
 

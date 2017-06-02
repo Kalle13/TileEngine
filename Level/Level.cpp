@@ -17,7 +17,7 @@ Level::~Level()
    }
    delete[] switchedTileIndexes;
    delete[] switchTileIndexes;
-   delete[] numSwitchedTiles;       // Delete this after switchedTileIndexes 2D array
+   delete[] numberOfSwitchedTiles;       // Delete this after switchedTileIndexes 2D array
 }
 
 bool Level::ChangeLevel(unsigned nextLevelNumber)
@@ -102,13 +102,13 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
          numberOfSwitchedTiles[0]   = 1;                       // Because the switch tile with index=2 will control 1 Gate tile
 
          {                                                     // New scope for tempSwitchedTileIndexes 2D array
-            unsigned tempSwitchedTileIndexes[][] = {{3}};      // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
+            unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
 
             for(unsigned i=0;i<numberOfSwitchTiles;++i){
                switchedTileIndexes[i] = new unsigned[numberOfSwitchedTiles[i]];
 
                for(unsigned j=0;j<numberOfSwitchedTiles[i];++j){
-                  switchTileIndexes[i][j] = tempSwitchedTileIndexes[i][j];
+                  switchedTileIndexes[i][j] = tempSwitchedTileIndexes[i][j];
                }
             }
          }
@@ -132,7 +132,9 @@ void Level::LevelUpdateTiles(sf::Vector2f entityPosition, bool useKeyPressed)
       if(levelTiles[i]->TestVectorCollision(entityPosition))
       {
          if(levelTiles[i]->GetTileType() == Tile::Switch && useKeyPressed){
+            printf("Switch toggled\n");
             levelTiles[i]->ToggleTile();
+            levelTiles[i]->UpdateTile();
          }
       }
    }

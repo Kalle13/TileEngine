@@ -16,6 +16,9 @@ void UserInput::SetInputState(sf::Keyboard::Key key, bool isKeyPressed)
    case sf::Keyboard::D:
       dKey = isKeyPressed;
       break;
+   case sf::Keyboard::E:
+      eKey = isKeyPressed;
+      break;
    case sf::Keyboard::Space:
       spaceKey = isKeyPressed;
       break;
@@ -23,6 +26,7 @@ void UserInput::SetInputState(sf::Keyboard::Key key, bool isKeyPressed)
       escapeKey = isKeyPressed;
       break;
    default:
+      printf("Key not mapped to input\n");
       break;
    }
 }
@@ -39,6 +43,8 @@ bool UserInput::GetKeyState(sf::Keyboard::Key key)
       return sKey;
    case sf::Keyboard::D:
       return dKey;
+   case sf::Keyboard::E:
+      return eKey;
    case sf::Keyboard::Space:
       return spaceKey;
    case sf::Keyboard::Escape:

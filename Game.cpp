@@ -46,6 +46,16 @@ void Game::ProcessEvents()
       {
          window.close();
       }
+      if(event.type == sf::Event::KeyPressed)
+      {
+         userInput.SetInputState(event.key.code,true);
+         printf("key pressed\n");
+      }
+      if(event.type == sf::Event::KeyReleased)
+      {
+         userInput.SetInputState(event.key.code,false);
+         printf("key released\n");
+      }
    }
 
 }
@@ -55,16 +65,18 @@ void Game::Update(float deltaT)
 
    if(level.GetLevelNumber() != 0){
       printf("Do we get here?\n");
-      level.UpdateLevel(0);
+      level.ChangeLevel(0);
       printf("Or here?\n");
    }
 
+   level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.GetKeyState(sf::Keyboard::E));
+/*
    timeAccumulator += deltaT;
    if(timeAccumulator>1.0){
-      level.LevelUpdateTiles(sf::Vector2f(0,0),false);
+      level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.GetKeyState(sf::Keyboard::E));
       timeAccumulator = 0;
    }
-
+*/
 }
 
 void Game::GameLogic(float deltaT)
