@@ -26,12 +26,12 @@ void UserInput::SetInputState(sf::Keyboard::Key key, bool isKeyPressed)
       escapeKey = isKeyPressed;
       break;
    default:
-      printf("Key not mapped to input\n");
+      printf("(UserInput::SetInputState()) Key not mapped to input\n");
       break;
    }
 }
 
-bool UserInput::GetKeyState(sf::Keyboard::Key key)
+bool UserInput::GetInputState(sf::Keyboard::Key key)
 {
    switch(key)
    {
@@ -54,4 +54,80 @@ bool UserInput::GetKeyState(sf::Keyboard::Key key)
    }
 
    return false;
+}
+
+
+void UserInput::SetKeyState(sf::Keyboard::Key key, bool state)
+{
+   unsigned keyboardFlag = 0;
+
+   switch(key)
+   {
+   case sf::Keyboard::W:
+      keyboardFlag |= UserInterface::W;
+      break;
+   case sf::Keyboard::A:
+      keyboardFlag |= UserInterface::A;
+      break;
+   case sf::Keyboard::S:
+      keyboardFlag |= UserInterface::S;
+      break;
+   case sf::Keyboard::D:
+      keyboardFlag |= UserInterface::D;
+      break;
+   case sf::Keyboard::E:
+      keyboardFlag |= UserInterface::E;
+      break;
+   case sf::Keyboard::Space:
+      keyboardFlag |= UserInterface::Space;
+      break;
+   case sf::Keyboard::Escape:
+      keyboardFlag |= UserInterface::Escape;
+      break;
+   default:
+      printf("(UserInput::SetKeyState()) Key not mapped to input\n");
+      break;
+   }
+
+   if(state){
+      keyStates |= keyboardFlag;
+   } else {
+      keyStates &= ~keyboardFlag;
+   }
+
+   //printf("prevKeyStates: 0x%.8x\n    KeyStates: 0x%.8x\n",prevKeyStates,keyStates);
+}
+
+
+bool UserInput::CheckKeyLevel(UserInterface::KeyboardFlags keyboardFlag)
+{
+   if(keyStates & keyboardFlag){
+      //prevKeyStates |= keyStates;
+      return true;
+   } else {
+      //prevKeyStates &= ~keyboardFlag;
+      return false;
+   }
+}
+
+
+bool UserInput::CheckKeyEdge(UserInterface::Edge edgeType, UserInterface::KeyboardFlags keyboardFlag)
+{
+   if(!((prevKeyStates&keyboardFlag)^(keyStates&keyboardFlag)))
+   {
+      return false;
+   }
+
+   switch(edgeType)
+   {
+   case UserInterface::Rising:
+      if(keyStates&keyboardFlag)    return true;
+      else                          return false;
+   case UserInterface::Falling:
+      if(~keyStates&keyboardFlag)   return true;
+      else                          return false;
+   default:
+      printf("(UserInput::CheckEdge()) No rising/falling edge specified?\n");
+      return false;
+   }
 }

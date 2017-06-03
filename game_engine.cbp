@@ -56,9 +56,17 @@
 			<Add library="libsfml-system-d.a" />
 			<Add directory="C:/SFML-2.4.0 - Completed Build/lib" />
 		</Linker>
+		<Unit filename="Entity/Entity.h" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.h" />
+		<Unit filename="Level/Level.cpp" />
+		<Unit filename="Level/Level.h" />
+		<Unit filename="Level/LevelTile.cpp" />
+		<Unit filename="Level/LevelTile.h" />
+		<Unit filename="Level/TileFactory.h" />
 		<Unit filename="SFMLGame.h" />
+		<Unit filename="UserInterface/UserInput.cpp" />
+		<Unit filename="UserInterface/UserInput.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -42,19 +42,19 @@ void Game::ProcessEvents()
    sf::Event event;
    while(window.pollEvent(event))
    {
-      if(event.type == sf::Event::Closed)
+      switch(event.type)
       {
+      case sf::Event::Closed:
          window.close();
-      }
-      if(event.type == sf::Event::KeyPressed)
-      {
-         userInput.SetInputState(event.key.code,true);
-         printf("key pressed\n");
-      }
-      if(event.type == sf::Event::KeyReleased)
-      {
-         userInput.SetInputState(event.key.code,false);
-         printf("key released\n");
+         break;
+      case sf::Event::KeyPressed:
+         userInput.SetKeyState(event.key.code,true);
+         break;
+      case sf::Event::KeyReleased:
+         userInput.SetKeyState(event.key.code,false);
+         break;
+      default:
+         break;
       }
    }
 
@@ -62,21 +62,18 @@ void Game::ProcessEvents()
 
 void Game::Update(float deltaT)
 {
-
    if(level.GetLevelNumber() != 0){
-      printf("Do we get here?\n");
       level.ChangeLevel(0);
-      printf("Or here?\n");
    }
 
-   level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.GetKeyState(sf::Keyboard::E));
-/*
-   timeAccumulator += deltaT;
-   if(timeAccumulator>1.0){
-      level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.GetKeyState(sf::Keyboard::E));
-      timeAccumulator = 0;
-   }
-*/
+   if(userInput.CheckKeyEdge(UserInterface::Rising,UserInterface::W))
+      printf("W key rising edge detected\n");
+   if(userInput.CheckKeyEdge(UserInterface::Falling,UserInterface::W))
+      printf("W key falling edge detected\n");
+
+   level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.CheckKeyEdge(UserInterface::Rising,UserInterface::E));
+
+   userInput.UpdateKeyStates();
 }
 
 void Game::GameLogic(float deltaT)
