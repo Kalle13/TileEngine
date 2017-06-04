@@ -4,6 +4,9 @@ Game::Game()
 {
    printf("Game constructor\n");
    numberOfEntities = 0;
+   timeAcc = 0;
+   gameInputs = 0;
+   lastGameInputs = 0;
 }
 
 Game::~Game()
@@ -72,6 +75,7 @@ void Game::Update(float deltaT)
       InitEntities();
    }
 
+   timeAcc += deltaT;
    GameLogic(0);
 
    userInput.UpdateKeyStates();
@@ -82,14 +86,39 @@ void Game::GameLogic(float deltaT)
    // Need to read gameInputFlags that were set in userInput.HandleInput() and respond accordingly
    // Check whether each input is a valid move before moving the player Entity
 
-   unsigned gameInputs = userInput.GetGameInputFlags();
+   gameInputs = userInput.GetGameInputFlags();
 
-   if(gameInputs & _UserInput::MoveUp)       entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(0,32));
-   if(gameInputs & _UserInput::MoveLeft)     entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(32,0));
-   if(gameInputs & _UserInput::MoveDown)     entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(0,32));
-   if(gameInputs & _UserInput::MoveRight)    entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(32,0));
-   if(gameInputs & _UserInput::Use)          level.LevelToggleTiles(entity[0].GetPosition(),true);
-   else                                      level.LevelToggleTiles(entity[0].GetPosition(),false);
+   if(lastGameInputs != gameInputs){
+      printf("0x%.8x\n",gameInputs);
+      lastGameInputs = gameInputs;
+   }
+
+   sf::Vector2f currentEntityPosition = entity[0].GetPosition();
+
+   bool wallUp    = level.CheckLevelForWalls(currentEntityPosition - sf::Vector2f(0,32));
+   bool wallLeft  = level.CheckLevelForWalls(currentEntityPosition - sf::Vector2f(32,0));
+   bool wallDown  = level.CheckLevelForWalls(currentEntityPosition + sf::Vector2f(0,32));
+   bool wallRight = level.CheckLevelForWalls(currentEntityPosition + sf::Vector2f(32,0));
+
+   if(gameInputs & _UserInput::MoveUp){
+      if(!wallUp) entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(0,32));
+      //else        printf("Wall up\n");
+   }
+   if(gameInputs & _UserInput::MoveLeft){
+      if(!wallLeft) entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(32,0));
+      //else        printf("Wall left\n");
+   }
+   if(gameInputs & _UserInput::MoveDown){
+      if(!wallDown) entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(0,32));
+      //else        printf("Wall down\n");
+   }
+   if(gameInputs & _UserInput::MoveRight){
+      if(!wallRight) entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(32,0));
+      //else        printf("Wall right\n");
+   }
+
+   if(gameInputs & _UserInput::Use)          level.ToggleLevelTiles(entity[0].GetPosition(),true);
+
    entity[0].UpdateEntity();
 }
 

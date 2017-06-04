@@ -124,10 +124,11 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
          tileStates[3]     = false;
 
          switchTileIndexes[0]       = 2;                       // Because the tile with index=2 is a switch tile
-         numberOfSwitchedTiles[0]   = 1;                       // Because the switch tile with index=2 will control 1 Gate tile
+         numberOfSwitchedTiles[0]   = 3;                       // Because the switch tile with index=2 will control 1 Gate tile
 
          {                                                     // New scope for tempSwitchedTileIndexes 2D array
-            unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
+            //unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
+            unsigned tempSwitchedTileIndexes[1][3] = {{0,1,3}};
 
             for(unsigned i=0;i<numberOfSwitchTiles;++i){
                switchedTileIndexes[i] = new unsigned[numberOfSwitchedTiles[i]];
@@ -170,13 +171,13 @@ bool Level::GetEntityData(unsigned entityIndex, Entity &entity)
    }
 }
 
-void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
+void Level::ToggleLevelTiles(sf::Vector2f entityPosition, bool useKeyPressed)
 {
    for(unsigned i=0;i<numberOfTiles;++i){
       if(levelTiles[i]->TestVectorCollision(entityPosition))
       {
          if(levelTiles[i]->GetTileType() == Tile::Switch && useKeyPressed){
-            printf("Switch toggled\n");
+            //printf("Switch toggled\n");
             levelTiles[i]->ToggleTile();
             levelTiles[i]->UpdateTile();
             for(unsigned j=0;j<numberOfTiles;++j){
@@ -184,7 +185,6 @@ void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
                   for(unsigned k=0;k<numberOfSwitchedTiles[j];++k){
                      levelTiles[switchedTileIndexes[j][k]]->ToggleTile();
                      levelTiles[switchedTileIndexes[j][k]]->UpdateTile();
-                     printf("(Level::LevelToggleTiles()) Switched tile enabled?: %d\n",levelTiles[switchedTileIndexes[j][k]]->GetTileState());
                   }
                }
             }
@@ -193,19 +193,19 @@ void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
    }
 }
 
-bool Level::LevelCheckForWall(sf::Vector2f entityPositionWithOffset)
+bool Level::CheckLevelForWalls(sf::Vector2f entityPositionWithOffset)
 {
    bool noTileFound = true;
    for(unsigned i=0;i<numberOfTiles;++i){
       if(levelTiles[i]->TestVectorCollision(entityPositionWithOffset)){
          noTileFound = false;
-         if((levelTiles[i]->GetTileType() == Tile::Wall)){
-            printf("WallTile found\n");
+         if((levelTiles[i]->GetTileType() == Tile::Type::Wall)){
+            //printf("(Level::CheckLevelForWalls) WallTile found at location (%f,%f)\n",levelTiles[i]->GetTilePosition().x,levelTiles[i]->GetTilePosition().y);
             if(levelTiles[i]->GetTileState()){
-               printf("WallTile enabled\n");
+               //printf("(Level::CheckLevelForWalls) WallTile enabled\n");
                return true;
             } else {
-               printf("WallTile disabled\n");
+               //printf("(Level::CheckLevelForWalls) WallTile disabled\n");
                return false;
             }
          } else {

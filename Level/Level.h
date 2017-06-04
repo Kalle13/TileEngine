@@ -30,8 +30,8 @@ public:
    bool        ChangeLevel(unsigned nextLevelNumber);
 
    // Tile-related functions
-   void        LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed);
-   bool        LevelCheckForWall(sf::Vector2f entityPositionWithOffset);
+   void        ToggleLevelTiles(sf::Vector2f entityPosition, bool useKeyPressed);
+   bool        CheckLevelForWalls(sf::Vector2f entityPositionWithOffset);
 
 public:
 
@@ -40,17 +40,23 @@ public:
 private:
 
    unsigned       levelNumber;
+
+private:
+
    unsigned       numberOfEntities;
-   unsigned       numberOfTiles;                // Total number of tiles in level
-   unsigned       numberOfSwitchTiles;          // Total number of switch tiles in level
-   unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
-   unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
-   unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
    sf::Vector2f   *entityPositions;
    sf::Color      *entityColors;
    float          *entityRadii;
    _Entity::Type  *entityTypes;
    Entity         *levelEntities;
+
+private:
+
+   unsigned       numberOfTiles;                // Total number of tiles in level
+   unsigned       numberOfSwitchTiles;          // Total number of switch tiles in level
+   unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
+   unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
+   unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
    sf::Vector2f   *tilePositions;
    sf::Color      *tileColors1;
    sf::Color      *tileColors2;
@@ -67,7 +73,6 @@ private:
          target.draw(*(levelTiles[i]));
       }
    }
-
 };
 
 #endif // _LEVEL_H_
