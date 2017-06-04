@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <cmath>
 
+#include "Entity/Entity.h"
 #include "Level/Level.h"
 #include "UserInterface/UserInput.h"
 
@@ -15,10 +16,11 @@ class Game
 {
 public:
 
+   unsigned numberOfEntities;
    sf::RenderWindow window;
    UserInput userInput;
    Level level;
-   float timeAccumulator;
+   Entity *entity;
 
    Game();
    ~Game();
@@ -28,6 +30,9 @@ public:
    void Update(float deltaT);
    void GameLogic(float deltaT);
    void Render();
+
+   // Function to initialize entities after the level changes
+   void InitEntities();
 };
 
 #endif // _GAME_H_

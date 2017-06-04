@@ -2,6 +2,11 @@
 
 Level::~Level()
 {
+   delete[] entityPositions;
+   delete[] entityColors;
+   delete[] entityRadii;
+   delete[] entityTypes;
+   delete[] levelEntities;
    delete[] tilePositions;
    delete[] tileColors1;
    delete[] tileColors2;
@@ -25,6 +30,11 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    levelNumber = nextLevelNumber;
 
    if(numberOfTiles>0){
+      delete[] entityPositions;
+      delete[] entityColors;
+      delete[] entityRadii;
+      delete[] entityTypes;
+      delete[] levelEntities;
       delete[] tilePositions;
       delete[] tileColors1;
       delete[] tileColors2;
@@ -48,22 +58,29 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    switch(levelNumber)
    {
    case 0:
+      numberOfEntities = 1;
       numberOfTiles = 4;
       numberOfSwitchTiles = 1;
       break;
    default:
+      numberOfEntities = 0;
       numberOfTiles = 0;
       numberOfSwitchTiles = 0;
       break;
    }
 
    // Allocate space for Level arrays
-   tilePositions  = new sf::Vector2f[numberOfTiles];
-   tileColors1    = new sf::Color[numberOfTiles];
-   tileColors2    = new sf::Color[numberOfTiles];
-   tileTypes      = new Tile::Type[numberOfTiles];
-   tileStates     = new bool[numberOfTiles];
-   levelTiles     = new LevelTile*[numberOfTiles];
+   entityPositions   = new sf::Vector2f[numberOfEntities];
+   entityColors      = new sf::Color[numberOfEntities];
+   entityRadii       = new float[numberOfEntities];
+   entityTypes       = new _Entity::Type[numberOfEntities];
+   levelEntities     = new Entity[numberOfEntities];
+   tilePositions     = new sf::Vector2f[numberOfTiles];
+   tileColors1       = new sf::Color[numberOfTiles];
+   tileColors2       = new sf::Color[numberOfTiles];
+   tileTypes         = new Tile::Type[numberOfTiles];
+   tileStates        = new bool[numberOfTiles];
+   levelTiles        = new LevelTile*[numberOfTiles];
 
    switchTileIndexes       = new unsigned[numberOfSwitchTiles];
    numberOfSwitchedTiles   = new unsigned[numberOfSwitchTiles];
@@ -73,6 +90,14 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
       switch(levelNumber)
       {
       case 0:
+         entityPositions[0] = sf::Vector2f(32,32);
+
+         entityColors[0]   = sf::Color(204,102,0);
+
+         entityRadii[0]    = 16.0;
+
+         entityTypes[0]    = _Entity::Player;
+
          tilePositions[0]  = sf::Vector2f(32,32);
          tilePositions[1]  = sf::Vector2f(64,32);
          tilePositions[2]  = sf::Vector2f(32,64);
@@ -119,6 +144,10 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
       }
    }
 
+   for(unsigned i=0;i<numberOfEntities;++i){
+      levelEntities[i].SetProperties(entityRadii[i],entityColors[i],entityTypes[i],entityPositions[i]);
+   }
+
    for(unsigned i=0;i<numberOfTiles;++i){
       levelTiles[i] = tileFactory.GetLevelTile(tileTypes[i],i,tilePositions[i],tileColors1[i],tileColors2[i],tileStates[i]);
    }
@@ -126,7 +155,22 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    return true;
 }
 
-void Level::LevelUpdateTiles(sf::Vector2f entityPosition, bool useKeyPressed)
+bool Level::GetEntityData(unsigned entityIndex, Entity &entity)
+{
+   if(numberOfEntities>0 && entityIndex<numberOfEntities){
+      float          radius   = levelEntities[entityIndex].GetRadius();
+      sf::Color      color    = levelEntities[entityIndex].GetColor();
+      _Entity::Type  type     = levelEntities[entityIndex].GetType();
+      sf::Vector2f   position = levelEntities[entityIndex].GetPosition();
+
+      entity.SetProperties(radius,color,type,position);
+      return true;
+   } else {
+      return false;
+   }
+}
+
+void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
 {
    for(unsigned i=0;i<numberOfTiles;++i){
       if(levelTiles[i]->TestVectorCollision(entityPosition))

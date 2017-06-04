@@ -3,12 +3,13 @@
 Game::Game()
 {
    printf("Game constructor\n");
-   timeAccumulator = 0;
+   numberOfEntities = 0;
 }
 
 Game::~Game()
 {
    printf("Game destructor\n");
+   delete[] entity;
 }
 
 void Game::GameLoop()
@@ -38,7 +39,6 @@ void Game::GameLoop()
 
 void Game::ProcessEvents()
 {
-
    sf::Event event;
    while(window.pollEvent(event))
    {
@@ -56,34 +56,65 @@ void Game::ProcessEvents()
       default:
          break;
       }
-   }
 
+      if(userInput.CheckKeyEdge(_UserInput::Rising,_UserInput::Escape)){
+         window.close();
+      }
+   }
 }
 
 void Game::Update(float deltaT)
 {
    if(level.GetLevelNumber() != 0){
       level.ChangeLevel(0);
+      InitEntities();
    }
 
-   if(userInput.CheckKeyEdge(UserInterface::Rising,UserInterface::W))
-      printf("W key rising edge detected\n");
-   if(userInput.CheckKeyEdge(UserInterface::Falling,UserInterface::W))
-      printf("W key falling edge detected\n");
+   GameLogic(0);
 
-   level.LevelUpdateTiles(sf::Vector2f(32,64),userInput.CheckKeyEdge(UserInterface::Rising,UserInterface::E));
+   level.LevelToggleTiles(entity[0].GetPosition(),userInput.CheckKeyEdge(_UserInput::Rising,_UserInput::E));
 
    userInput.UpdateKeyStates();
 }
 
 void Game::GameLogic(float deltaT)
 {
-
+   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::W))  entity[0].UpdatePosition(entity[0].GetPosition() - sf::Vector2f(0,32));
+   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::A))  entity[0].UpdatePosition(entity[0].GetPosition() - sf::Vector2f(32,0));
+   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::S))  entity[0].UpdatePosition(entity[0].GetPosition() + sf::Vector2f(0,32));
+   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::D))  entity[0].UpdatePosition(entity[0].GetPosition() + sf::Vector2f(32,0));
 }
+
 
 void Game::Render()
 {
    window.clear(sf::Color::Black);
    window.draw(level);
+   for(unsigned i=0;i<numberOfEntities;++i){
+      window.draw(entity[i]);
+   }
    window.display();
+}
+
+
+void Game::InitEntities()
+{
+   if(numberOfEntities>0){
+      delete[] entity;
+   }
+
+   numberOfEntities = level.GetLevelNumberOfEntites();
+
+   if(numberOfEntities == 0){
+      printf("(Game::InitEntities) Level does not contain entities\n");
+   }
+
+   entity = new Entity[numberOfEntities];
+
+   for(unsigned i=0;i<numberOfEntities;++i){
+      if(!level.GetEntityData(i,entity[i])){
+         printf("(Game::InitEntities) Error: Failed to obtain entity information from level data (entity index %d)\n",i);
+      }
+      entity[i].UpdateEntity();
+   }
 }

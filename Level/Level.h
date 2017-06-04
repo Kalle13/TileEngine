@@ -9,6 +9,7 @@
 #include <cmath>
 #include <assert.h>
 
+#include "C:/Users/Kalle13/CppWorkspace/SFML/Game_Engine/Entity/Entity.h"
 #include "LevelTile.h"
 #include "TileFactory.h"
 
@@ -16,17 +17,20 @@ class Level : public sf::Drawable
 {
 public:
 
-   Level() : numberOfTiles(0) {};
-   Level(unsigned initLevelNumber) : levelNumber(initLevelNumber), numberOfTiles(0) {}
+   Level() : numberOfEntities(0), numberOfTiles(0) {};
+   Level(unsigned initLevelNumber) : levelNumber(initLevelNumber), numberOfEntities(0), numberOfTiles(0) {}
    ~Level();
 
-   unsigned    GetLevelNumber(){return levelNumber;}
+   unsigned    GetLevelNumber()           {return levelNumber;}
+   unsigned    GetLevelNumberOfEntites()  {return numberOfEntities;}
+   bool        GetEntityData(unsigned entityIndex, Entity &entity);
+   //void      DeleteEntityData();  // Function to delete level entity data after it has been used by Game class to initialize entities (level does not need to store this information anymore)
 
    // Functions to change levels
    bool        ChangeLevel(unsigned nextLevelNumber);
 
    // Tile-related functions
-   void        LevelUpdateTiles(sf::Vector2f entityPosition, bool useKeyPressed);
+   void        LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed);
 
 public:
 
@@ -35,11 +39,17 @@ public:
 private:
 
    unsigned       levelNumber;
+   unsigned       numberOfEntities;
    unsigned       numberOfTiles;                // Total number of tiles in level
    unsigned       numberOfSwitchTiles;          // Total number of switch tiles in level
    unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
    unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
    unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
+   sf::Vector2f   *entityPositions;
+   sf::Color      *entityColors;
+   float          *entityRadii;
+   _Entity::Type  *entityTypes;
+   Entity         *levelEntities;
    sf::Vector2f   *tilePositions;
    sf::Color      *tileColors1;
    sf::Color      *tileColors2;
