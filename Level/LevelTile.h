@@ -51,6 +51,7 @@ public:
    Tile::Type     GetTileType()        {return tileType;}
    virtual void   UpdateTile() = 0;
    virtual void   ToggleTile() = 0;
+   virtual bool   GetTileState() = 0;
 
 protected:
 
@@ -80,6 +81,7 @@ public:
    //Tile::Type GetTileType() override {return Tile::Type::Base;}
    void UpdateTile() override;
    void ToggleTile() override;
+   bool GetTileState() override;
 
 };
 
@@ -96,6 +98,7 @@ public:
    //Tile::Type GetTileType() override {return Tile::Type::Wall;}
    void UpdateTile() override;
    void ToggleTile() override;
+   bool GetTileState() override;
 
    bool GetWallState(){return wallEnabled;}
    void SetWallState(bool setWallEnabled){wallEnabled = setWallEnabled;}    // Used to enable/disable a wall from a switch
@@ -120,6 +123,7 @@ public:
    //Tile::Type   GetTileType() override {return Tile::Type::Gate;}
    void           UpdateTile() override;
    void           ToggleTile() override;
+   bool           GetTileState() override;
 
    bool           GetGateState()             {return gateOpen;}
    unsigned       GetLevelDestination()      {return levelDestination;}          // Returns level number of gate destination (for inter-level gates)
@@ -154,6 +158,7 @@ public:
    //Tile::Type GetTileType() override {return Tile::Type::Switch;}
    void        UpdateTile() override;
    void        ToggleTile() override;
+   bool        GetTileState() override;
 
    void        SetSwitchState(bool switchState);
    void        SetSwitchedTileIndexes(unsigned *tileIndexArray, unsigned numTileIndexes);

@@ -49,7 +49,7 @@ bool LevelTile::TestRectangleCollision(sf::FloatRect floatRect)
    return tileRectangle.getGlobalBounds().intersects(floatRect);
 }
 
-
+/*******************************  Base  Tile   *******************************/
 void BaseTile::UpdateTile()
 {
    if(tileRectangle.getFillColor() == tileColor1){
@@ -66,6 +66,11 @@ void BaseTile::ToggleTile()
    } else {
       tileRectangle.setFillColor(tileColor1);
    }
+}
+
+bool BaseTile::GetTileState()
+{
+   return false;
 }
 
 /*******************************  Wall  Tile   *******************************/
@@ -92,6 +97,11 @@ void WallTile::ToggleWallState()
    }
 }
 
+bool WallTile::GetTileState()
+{
+   return GetWallState();
+}
+
 /*******************************  Gate  Tile   *******************************/
 void GateTile::UpdateTile()
 {
@@ -114,6 +124,11 @@ void GateTile::ToggleGateState()
    } else {
       gateOpen = true;
    }
+}
+
+bool GateTile::GetTileState()
+{
+   return GetGateState();
 }
 
 /*******************************  Switch  Tile   *******************************/
@@ -156,4 +171,9 @@ void SwitchTile::ToggleSwitchState()
       switchState = true;
    }
    //switchState != switchState;    // Does this work?
+}
+
+bool SwitchTile::GetTileState()
+{
+   return GetSwitchState();
 }

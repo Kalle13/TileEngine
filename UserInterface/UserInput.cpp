@@ -1,62 +1,5 @@
 #include "UserInput.h"
 
-void UserInput::SetInputState(sf::Keyboard::Key key, bool isKeyPressed)
-{
-   switch(key)
-   {
-   case sf::Keyboard::W:
-      wKey = isKeyPressed;
-      break;
-   case sf::Keyboard::A:
-      aKey = isKeyPressed;
-      break;
-   case sf::Keyboard::S:
-      sKey = isKeyPressed;
-      break;
-   case sf::Keyboard::D:
-      dKey = isKeyPressed;
-      break;
-   case sf::Keyboard::E:
-      eKey = isKeyPressed;
-      break;
-   case sf::Keyboard::Space:
-      spaceKey = isKeyPressed;
-      break;
-   case sf::Keyboard::Escape:
-      escapeKey = isKeyPressed;
-      break;
-   default:
-      printf("(UserInput::SetInputState()) Key not mapped to input\n");
-      break;
-   }
-}
-
-bool UserInput::GetInputState(sf::Keyboard::Key key)
-{
-   switch(key)
-   {
-   case sf::Keyboard::W:
-      return wKey;
-   case sf::Keyboard::A:
-      return aKey;
-   case sf::Keyboard::S:
-      return sKey;
-   case sf::Keyboard::D:
-      return dKey;
-   case sf::Keyboard::E:
-      return eKey;
-   case sf::Keyboard::Space:
-      return spaceKey;
-   case sf::Keyboard::Escape:
-      return escapeKey;
-   default:
-      return false;
-   }
-
-   return false;
-}
-
-
 void UserInput::SetKeyState(sf::Keyboard::Key key, bool state)
 {
    unsigned keyboardFlag = 0;
@@ -126,9 +69,67 @@ bool UserInput::CheckKeyEdge(_UserInput::Edge edgeType, _UserInput::KeyboardFlag
 }
 
 
+void UserInput::SetGameInputFlag(_UserInput::GameInputFlags gameInputFlag, bool setFlag)
+{
+   unsigned tempGameInputFlag = 0;
+
+   switch(gameInputFlag)
+   {
+   case _UserInput::MoveUp:
+      tempGameInputFlag |= _UserInput::MoveUp;
+      break;
+   case _UserInput::MoveLeft:
+      tempGameInputFlag |= _UserInput::MoveLeft;
+      break;
+   case _UserInput::MoveDown:
+      tempGameInputFlag |= _UserInput::MoveDown;
+      break;
+   case _UserInput::MoveRight:
+      tempGameInputFlag |= _UserInput::MoveRight;
+      break;
+   case _UserInput::Use:
+      tempGameInputFlag |= _UserInput::Use;
+      break;
+   case _UserInput::ChangeColor:
+      tempGameInputFlag |= _UserInput::ChangeColor;
+      break;
+   case _UserInput::ExitGame:
+      tempGameInputFlag |= _UserInput::ExitGame;
+      break;
+   default:
+      break;
+   }
+
+   if(setFlag){
+      gameInputFlags |= tempGameInputFlag;
+   } else {
+      gameInputFlags &= ~tempGameInputFlag;
+   }
+}
+
+
 void UserInput::HandleInput()
 {
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::W))       gameInputFlags |= _UserInput::MoveUp;
+   else                                                     gameInputFlags &= ~_UserInput::MoveUp;
 
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::A))       gameInputFlags |= _UserInput::MoveLeft;
+   else                                                     gameInputFlags &= ~_UserInput::MoveLeft;
+
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::S))       gameInputFlags |= _UserInput::MoveDown;
+   else                                                     gameInputFlags &= ~_UserInput::MoveDown;
+
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::D))       gameInputFlags |= _UserInput::MoveRight;
+   else                                                     gameInputFlags &= ~_UserInput::MoveRight;
+
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::E))       gameInputFlags |= _UserInput::Use;
+   else                                                     gameInputFlags &= ~_UserInput::Use;
+
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::Space))   gameInputFlags |= _UserInput::ChangeColor;
+   else                                                     gameInputFlags &= ~_UserInput::ChangeColor;
+
+   if(CheckKeyEdge(_UserInput::Rising,_UserInput::Escape))  gameInputFlags |= _UserInput::ExitGame;
+   else                                                     gameInputFlags &= ~_UserInput::ExitGame;
 }
 
 

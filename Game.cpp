@@ -61,6 +61,8 @@ void Game::ProcessEvents()
          window.close();
       }
    }
+
+   userInput.HandleInput();
 }
 
 void Game::Update(float deltaT)
@@ -72,17 +74,23 @@ void Game::Update(float deltaT)
 
    GameLogic(0);
 
-   level.LevelToggleTiles(entity[0].GetPosition(),userInput.CheckKeyEdge(_UserInput::Rising,_UserInput::E));
-
    userInput.UpdateKeyStates();
 }
 
 void Game::GameLogic(float deltaT)
 {
-   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::W))  entity[0].UpdatePosition(entity[0].GetPosition() - sf::Vector2f(0,32));
-   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::A))  entity[0].UpdatePosition(entity[0].GetPosition() - sf::Vector2f(32,0));
-   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::S))  entity[0].UpdatePosition(entity[0].GetPosition() + sf::Vector2f(0,32));
-   if(userInput.CheckKeyEdge(_UserInput::Rising, _UserInput::D))  entity[0].UpdatePosition(entity[0].GetPosition() + sf::Vector2f(32,0));
+   // Need to read gameInputFlags that were set in userInput.HandleInput() and respond accordingly
+   // Check whether each input is a valid move before moving the player Entity
+
+   unsigned gameInputs = userInput.GetGameInputFlags();
+
+   if(gameInputs & _UserInput::MoveUp)       entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(0,32));
+   if(gameInputs & _UserInput::MoveLeft)     entity[0].SetPosition(entity[0].GetPosition() - sf::Vector2f(32,0));
+   if(gameInputs & _UserInput::MoveDown)     entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(0,32));
+   if(gameInputs & _UserInput::MoveRight)    entity[0].SetPosition(entity[0].GetPosition() + sf::Vector2f(32,0));
+   if(gameInputs & _UserInput::Use)          level.LevelToggleTiles(entity[0].GetPosition(),true);
+   else                                      level.LevelToggleTiles(entity[0].GetPosition(),false);
+   entity[0].UpdateEntity();
 }
 
 

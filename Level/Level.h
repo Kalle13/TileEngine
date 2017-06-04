@@ -31,6 +31,7 @@ public:
 
    // Tile-related functions
    void        LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed);
+   bool        LevelCheckForWall(sf::Vector2f entityPositionWithOffset);
 
 public:
 

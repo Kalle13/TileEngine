@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1496545691 source:c:\users\kalle13\cppworkspace\sfml\game_engine\game.cpp
+1496593388 source:c:\users\kalle13\cppworkspace\sfml\game_engine\game.cpp
 	"Game.h"
 
-1496542659 c:\users\kalle13\cppworkspace\sfml\game_engine\game.h
+1496552501 c:\users\kalle13\cppworkspace\sfml\game_engine\game.h
 	<SFML/System.hpp>
 	<SFML/Window.hpp>
 	<SFML/Graphics.hpp>
@@ -400,10 +400,10 @@
 	<string>
 	<vector>
 
-1496545360 source:c:\users\kalle13\cppworkspace\sfml\game_engine\level\level.cpp
+1496553942 source:c:\users\kalle13\cppworkspace\sfml\game_engine\level\level.cpp
 	"Level.h"
 
-1496541984 c:\users\kalle13\cppworkspace\sfml\game_engine\level\level.h
+1496551819 c:\users\kalle13\cppworkspace\sfml\game_engine\level\level.h
 	<SFML/System.hpp>
 	<SFML/Window.hpp>
 	<SFML/Graphics.hpp>
@@ -415,7 +415,7 @@
 	"LevelTile.h"
 	"TileFactory.h"
 
-1496367430 c:\users\kalle13\cppworkspace\sfml\game_engine\level\leveltile.h
+1496553164 c:\users\kalle13\cppworkspace\sfml\game_engine\level\leveltile.h
 	<SFML/System.hpp>
 	<SFML/Window.hpp>
 	<SFML/Graphics.hpp>
@@ -423,10 +423,10 @@
 	<stdio.h>
 	<cmath>
 
-1496366279 source:c:\users\kalle13\cppworkspace\sfml\game_engine\level\leveltile.cpp
+1496553251 source:c:\users\kalle13\cppworkspace\sfml\game_engine\level\leveltile.cpp
 	"LevelTile.h"
 
-1496545103 c:\users\kalle13\cppworkspace\sfml\game_engine\userinterface\userinput.h
+1496593350 c:\users\kalle13\cppworkspace\sfml\game_engine\userinterface\userinput.h
 	<SFML/System.hpp>
 	<SFML/Window.hpp>
 	<SFML/Graphics.hpp>
@@ -458,14 +458,26 @@
 1495948426 c:\users\kalle13\cppworkspace\sfml\game_engine\level\leveldata.h
 	"LevelTile.h"
 
-1496545217 source:c:\users\kalle13\cppworkspace\sfml\game_engine\userinterface\userinput.cpp
+1496593512 source:c:\users\kalle13\cppworkspace\sfml\game_engine\userinterface\userinput.cpp
 	"UserInput.h"
 
 1496542444 source:c:\users\kalle13\cppworkspace\sfml\game_engine\entity\entity.cpp
 	"Entity.h"
 
-1496545344 c:\users\kalle13\cppworkspace\sfml\game_engine\entity\entity.h
+1496587964 c:\users\kalle13\cppworkspace\sfml\game_engine\entity\entity.h
 	<SFML/System.hpp>
 	<SFML/Window.hpp>
 	<SFML/Graphics.hpp>
+
+1496589147 source:c:\users\kalle13\cppworkspace\sfml\game_engine\entity\entitymanager.cpp
+	"EntityManager.h"
+
+1496589115 c:\users\kalle13\cppworkspace\sfml\game_engine\entity\entitymanager.h
+	<SFML/System.hpp>
+	<SFML/Window.hpp>
+	<SFML/Graphics.hpp>
+	<stdlib.h>
+	<stdio.h>
+	<cmath>
+	"Entity.h"
 

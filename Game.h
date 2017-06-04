@@ -20,6 +20,8 @@ public:
    sf::RenderWindow window;
    UserInput userInput;
    Level level;
+
+   // Replace this with an EntityManager class that holds all Entity instances (similar to Level->LevelTiles hierarchy)
    Entity *entity;
 
    Game();

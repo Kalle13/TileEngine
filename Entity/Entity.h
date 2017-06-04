@@ -8,7 +8,7 @@
 
 namespace _Entity
 {
-   enum Type{Player, Item, Bot};
+   enum Type{Player, Item, Bot, Null};
 }
 
 
@@ -30,21 +30,31 @@ public:
       entityCircle.setPosition(position);
       entityCircle.setPointCount(30);
    }
+
+
    // Functions to set properties without updating the entity
-   void  SetProperties(float newRadius, sf::Color newColor, _Entity::Type newType, sf::Vector2f newPosition);
-   void  SetPosition(sf::Vector2f newPosition) {position = newPosition;}
+
+   void              SetProperties(float newRadius, sf::Color newColor, _Entity::Type newType, sf::Vector2f newPosition);
+   void              SetRadius(float newRadius) {circleRadius = newRadius;}
+   void              SetColor(sf::Color newColor) {color = newColor;}
+   void              SetType(_Entity::Type newType) {type = newType;}   // Have to change Entity to different derived class type if/when Entity types are defined
+   void              SetPosition(sf::Vector2f newPosition) {position = newPosition;}
+
 
    // Functions to get properties
+
    float             GetRadius()    {return circleRadius;}
    sf::Color         GetColor()     {return color;}
    _Entity::Type     GetType()      {return type;}
    sf::Vector2f      GetPosition()  {return position;}
 
+
    // Functions to Update Entity (set a parameter, then update the entityCircle)
-   void  UpdateRadius(float newRadius);
-   void  UpdateColor(sf::Color newColor);
-   void  UpdatePosition(sf::Vector2f newPosition);
-   void  UpdateEntity();
+
+   void              UpdateRadius(float newRadius);
+   void              UpdateColor(sf::Color newColor);
+   void              UpdatePosition(sf::Vector2f newPosition);
+   void              UpdateEntity();
 
 private:
 
@@ -56,10 +66,10 @@ private:
 
 private:
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-    {
-        target.draw(entityCircle);
-    }
+   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+   {
+     target.draw(entityCircle);
+   }
 };
 
 

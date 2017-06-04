@@ -184,10 +184,35 @@ void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
                   for(unsigned k=0;k<numberOfSwitchedTiles[j];++k){
                      levelTiles[switchedTileIndexes[j][k]]->ToggleTile();
                      levelTiles[switchedTileIndexes[j][k]]->UpdateTile();
+                     printf("(Level::LevelToggleTiles()) Switched tile enabled?: %d\n",levelTiles[switchedTileIndexes[j][k]]->GetTileState());
                   }
                }
             }
          }
       }
    }
+}
+
+bool Level::LevelCheckForWall(sf::Vector2f entityPositionWithOffset)
+{
+   bool noTileFound = true;
+   for(unsigned i=0;i<numberOfTiles;++i){
+      if(levelTiles[i]->TestVectorCollision(entityPositionWithOffset)){
+         noTileFound = false;
+         if((levelTiles[i]->GetTileType() == Tile::Wall)){
+            printf("WallTile found\n");
+            if(levelTiles[i]->GetTileState()){
+               printf("WallTile enabled\n");
+               return true;
+            } else {
+               printf("WallTile disabled\n");
+               return false;
+            }
+         } else {
+            return false; // Tile is not a WallTile
+         }
+      }
+   }
+   if(noTileFound) return true;  // entity position with offset is off of the level/map
+   return false;
 }

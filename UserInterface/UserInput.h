@@ -39,15 +39,19 @@ class UserInput
 {
 public:
 
-   UserInput() : keyStates(0), prevKeyStates(0), gameInputFlags(0), wKey(false), aKey(false), sKey(false), dKey(false), eKey(false), spaceKey(false), escapeKey(false) {}
+   UserInput() : keyStates(0), prevKeyStates(0), gameInputFlags(0) {}
+
    void        UpdateKeyStates(){prevKeyStates = keyStates;}         // Function to update prevKeyStates for any unhandled inputs at end of Game::Update() method
-   void        SetInputState(sf::Keyboard::Key key, bool isKeyPressed);
-   bool        GetInputState(sf::Keyboard::Key key);
    void        SetKeyState(sf::Keyboard::Key key, bool state);
+
    unsigned    GetKeyState(){return keyStates;}
    unsigned    GetPrevKeyState(){return prevKeyStates;}
+
    bool        CheckKeyLevel(_UserInput::KeyboardFlags keyboardFlag);
    bool        CheckKeyEdge(_UserInput::Edge edgeType, _UserInput::KeyboardFlags keyboardFlag);
+
+   void        SetGameInputFlag(_UserInput::GameInputFlags gameInputFlag, bool setFlag);
+   unsigned    GetGameInputFlags(){return gameInputFlags;}
 
    void        HandleInput();
    void        HandleInput(_UserInput::GameType gameType);  // Function to handle user input in a context-specific manner (may not be a good idea)
@@ -56,15 +60,7 @@ private:
 
    unsigned    keyStates;        // Updated every time a keyboard button is pressed
    unsigned    prevKeyStates;    // Updated after a CheckLevel or CheckEdge function call
-   unsigned    gameInputFlags;
-   bool        wKey;
-   bool        aKey;
-   bool        sKey;
-   bool        dKey;
-   bool        eKey;
-   bool        spaceKey;
-   bool        escapeKey;
-
+   unsigned    gameInputFlags;   // Represents the interpreted device input for the context of the game
 };
 
 #endif // _USER_INPUT_H_
