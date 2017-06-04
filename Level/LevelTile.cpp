@@ -1,14 +1,10 @@
 #include "LevelTile.h"
 
-void LevelTile::UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor)
+void LevelTile::UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor1, sf::Color newColor2)
 {
    tileRectangle.setSize(sf::Vector2f(TILE_WIDTH,TILE_HEIGHT));
-   if(tileRectangle.getFillColor() == tileColor1){
-      tileColor1 = newColor;
-   } else {
-      tileColor2 = newColor;
-   }
-   tileRectangle.setFillColor(newColor);
+   tileRectangle.setFillColor(newColor1);
+   tileRectangle.setOutlineColor(newColor2);
    tileRectangle.setOrigin(TILE_WIDTH/2,TILE_HEIGHT/2);
    tileRectangle.setPosition(tilePosition);
 }
@@ -18,6 +14,7 @@ void LevelTile::SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2)
    tileColor1 = newTileColor1;
    tileColor2 = newTileColor2;
    tileRectangle.setFillColor(tileColor1);
+   tileRectangle.setOutlineColor(tileColor2);
 }
 
 void LevelTile::SetTilePosition(sf::Vector2f newTilePosition)
@@ -25,17 +22,20 @@ void LevelTile::SetTilePosition(sf::Vector2f newTilePosition)
    tilePosition = newTilePosition;
 }
 
-void LevelTile::UpdateTileRectangleColor(sf::Color newRectColor)
+void LevelTile::UpdateTileRectangleColor(sf::Color newRectColor1, sf::Color newRectColor2)
 {
-   tileRectangle.setFillColor(newRectColor);
+   tileRectangle.setFillColor(newRectColor1);
+   tileRectangle.setOutlineColor(newRectColor2);
 }
 
 void LevelTile::ToggleTileColor()
 {
    if(tileRectangle.getFillColor() == tileColor1){
       tileRectangle.setFillColor(tileColor2);
+      tileRectangle.setOutlineColor(tileColor1);
    } else {
       tileRectangle.setFillColor(tileColor1);
+      tileRectangle.setOutlineColor(tileColor2);
    }
 }
 
@@ -61,11 +61,7 @@ void BaseTile::UpdateTile()
 
 void BaseTile::ToggleTile()
 {
-   if(tileRectangle.getFillColor() == tileColor1){
-      tileRectangle.setFillColor(tileColor2);
-   } else {
-      tileRectangle.setFillColor(tileColor1);
-   }
+   ToggleTileColor();
 }
 
 bool BaseTile::GetTileState()
@@ -77,9 +73,11 @@ bool BaseTile::GetTileState()
 void WallTile::UpdateTile()
 {
    if(wallEnabled){
-      UpdateTileRectangleColor(tileColor1);
+      tileRectangle.setFillColor(tileColor1);
+      tileRectangle.setOutlineColor(tileColor2);
    } else {
-      UpdateTileRectangleColor(tileColor2);
+      tileRectangle.setFillColor(tileColor2);
+      tileRectangle.setOutlineColor(tileColor1);
    }
 }
 
@@ -107,8 +105,10 @@ void GateTile::UpdateTile()
 {
    if(gateOpen){
       tileRectangle.setFillColor(tileColor1);
+      tileRectangle.setOutlineColor(tileColor2);
    } else {
       tileRectangle.setFillColor(tileColor2);
+      tileRectangle.setOutlineColor(tileColor1);
    }
 }
 
@@ -136,8 +136,10 @@ void SwitchTile::UpdateTile()
 {
    if(switchState){
       tileRectangle.setFillColor(tileColor1);
+      tileRectangle.setOutlineColor(tileColor2);
    } else {
       tileRectangle.setFillColor(tileColor2);
+      tileRectangle.setOutlineColor(tileColor1);
    }
 }
 

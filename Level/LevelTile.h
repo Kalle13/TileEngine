@@ -21,24 +21,27 @@ namespace Tile
 class LevelTile : public sf::Drawable{
 public:
 
-   LevelTile(unsigned initTileIndex, sf::Vector2f initTilePosition, Tile::Type initTileType,
+   LevelTile(unsigned initTileIndex, float initTileBorderWidth, sf::Vector2f initTilePosition, Tile::Type initTileType,
              sf::Color initTileColor1, sf::Color initTileColor2) :
                 tileIndex(initTileIndex),
+                tileBorderWidth(initTileBorderWidth),
                 tilePosition(initTilePosition),
                 tileType(initTileType),
                 tileColor1(initTileColor1),
                 tileColor2(initTileColor2)
    {
       tileRectangle.setSize(sf::Vector2f(TILE_WIDTH,TILE_HEIGHT));
+      tileRectangle.setOutlineThickness(initTileBorderWidth);
       tileRectangle.setFillColor(initTileColor1);
+      tileRectangle.setOutlineColor(initTileColor2);
       tileRectangle.setOrigin(TILE_WIDTH/2,TILE_HEIGHT/2);
       tileRectangle.setPosition(initTilePosition);
    }
    virtual ~LevelTile() {};
    void           SetTileColors(sf::Color newTileColor1, sf::Color newTileColor2);
    void           SetTilePosition(sf::Vector2f newTilePosition);
-   void           UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor);
-   void           UpdateTileRectangleColor(sf::Color newRectColor);
+   void           UpdateTileRectangle(sf::Vector2f newPosition, sf::Color newColor1, sf::Color newColor2);
+   void           UpdateTileRectangleColor(sf::Color newRectColor1, sf::Color newRectColor2);
    void           ToggleTileColor();
 
    sf::Color      GetTileColor1()      {return tileColor1;}
@@ -56,6 +59,7 @@ public:
 protected:
 
    unsigned             tileIndex;     // Tile index helpful for when tiles need to act upon one another
+   float                tileBorderWidth;
    sf::Vector2f         tilePosition;
    Tile::Type           tileType;
    sf::Color            tileColor1;
@@ -76,7 +80,7 @@ public:
 
    BaseTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2) :
-            LevelTile(initTileIndex, initTilePosition, Tile::Base, initTileColor1, initTileColor2)
+            LevelTile(initTileIndex, -0.5f, initTilePosition, Tile::Base, initTileColor1, initTileColor2)
    {}
    //Tile::Type GetTileType() override {return Tile::Type::Base;}
    void UpdateTile() override;
@@ -92,7 +96,7 @@ public:
    WallTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2,
             bool wallTileEnabled) :
-               LevelTile(initTileIndex, initTilePosition, Tile::Wall, initTileColor1, initTileColor2),
+               LevelTile(initTileIndex, -5.0f, initTilePosition, Tile::Wall, initTileColor1, initTileColor2),
                wallEnabled(wallTileEnabled)
    {}
    //Tile::Type GetTileType() override {return Tile::Type::Wall;}
@@ -117,7 +121,7 @@ public:
    GateTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2,
             bool initGateState) :
-               LevelTile(initTileIndex, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
+               LevelTile(initTileIndex, -2.0f, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
                gateOpen(initGateState)
    {}
    //Tile::Type   GetTileType() override {return Tile::Type::Gate;}
@@ -149,7 +153,7 @@ public:
    SwitchTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
               sf::Color initTileColor1, sf::Color initTileColor2,
               bool initSwitchState) :
-                 LevelTile(initTileIndex, initTilePosition, Tile::Switch, initTileColor1, initTileColor2),
+                 LevelTile(initTileIndex, -12.0f, initTilePosition, Tile::Switch, initTileColor1, initTileColor2),
                  switchState(initSwitchState)
    {
       numSwitchedTiles = 0;

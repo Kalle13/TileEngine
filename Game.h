@@ -22,8 +22,6 @@ public:
    Level level;
 
    float timeAcc;
-   unsigned gameInputs;
-   unsigned lastGameInputs;
 
    // Replace this with an EntityManager class that holds all Entity instances (similar to Level->LevelTiles hierarchy)
    Entity *entity;
