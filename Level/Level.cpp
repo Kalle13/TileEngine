@@ -179,6 +179,14 @@ void Level::LevelToggleTiles(sf::Vector2f entityPosition, bool useKeyPressed)
             printf("Switch toggled\n");
             levelTiles[i]->ToggleTile();
             levelTiles[i]->UpdateTile();
+            for(unsigned j=0;j<numberOfTiles;++j){
+               if(switchTileIndexes[j] == i){
+                  for(unsigned k=0;k<numberOfSwitchedTiles[j];++k){
+                     levelTiles[switchedTileIndexes[j][k]]->ToggleTile();
+                     levelTiles[switchedTileIndexes[j][k]]->UpdateTile();
+                  }
+               }
+            }
          }
       }
    }
