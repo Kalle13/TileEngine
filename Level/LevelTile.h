@@ -82,7 +82,7 @@ public:
             sf::Color initTileColor1, sf::Color initTileColor2) :
             LevelTile(initTileIndex, -0.5f, initTilePosition, Tile::Base, initTileColor1, initTileColor2)
    {}
-   //Tile::Type GetTileType() override {return Tile::Type::Base;}
+
    void UpdateTile() override;
    void ToggleTile() override;
    bool GetTileState() override;
@@ -96,10 +96,10 @@ public:
    WallTile(unsigned initTileIndex, sf::Vector2f initTilePosition,
             sf::Color initTileColor1, sf::Color initTileColor2,
             bool wallTileEnabled) :
-               LevelTile(initTileIndex, -5.0f, initTilePosition, Tile::Wall, initTileColor1, initTileColor2),
+               LevelTile(initTileIndex, -8.0f, initTilePosition, Tile::Wall, initTileColor1, initTileColor2),
                wallEnabled(wallTileEnabled)
    {}
-   //Tile::Type GetTileType() override {return Tile::Type::Wall;}
+
    void UpdateTile() override;
    void ToggleTile() override;
    bool GetTileState() override;
@@ -124,7 +124,7 @@ public:
                LevelTile(initTileIndex, -2.0f, initTilePosition, Tile::Gate, initTileColor1, initTileColor2),
                gateOpen(initGateState)
    {}
-   //Tile::Type   GetTileType() override {return Tile::Type::Gate;}
+
    void           UpdateTile() override;
    void           ToggleTile() override;
    bool           GetTileState() override;
@@ -159,7 +159,7 @@ public:
       numSwitchedTiles = 0;
    }
    ~SwitchTile(){delete[] switchedTileIndexes;}
-   //Tile::Type GetTileType() override {return Tile::Type::Switch;}
+
    void        UpdateTile() override;
    void        ToggleTile() override;
    bool        GetTileState() override;

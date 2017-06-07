@@ -5,11 +5,6 @@ Game::Game()
    printf("Game constructor\n");
    numberOfEntities = 0;
    timeAcc = 0;
-
-   if(level.GetLevelNumber() != 0){
-      level.ChangeLevel(0);
-      InitEntities();
-   }
 }
 
 Game::~Game()
@@ -73,6 +68,11 @@ void Game::ProcessEvents()
 
 void Game::Update(float deltaT)
 {
+   if(level.GetLevelNumber() != 0){
+      level.ChangeLevel(0);
+      InitEntities();
+   }
+
    timeAcc += deltaT;
    GameLogic(0);
 

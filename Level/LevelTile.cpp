@@ -172,7 +172,6 @@ void SwitchTile::ToggleSwitchState()
    } else {
       switchState = true;
    }
-   //switchState != switchState;    // Does this work?
 }
 
 bool SwitchTile::GetTileState()

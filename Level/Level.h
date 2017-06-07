@@ -17,7 +17,7 @@ class Level : public sf::Drawable
 {
 public:
 
-   Level() : numberOfEntities(0), numberOfTiles(0) {};
+   Level() : numberOfEntities(0), numberOfTiles(0), numberOfGateTiles(0) {};
    Level(unsigned initLevelNumber) : levelNumber(initLevelNumber), numberOfEntities(0), numberOfTiles(0) {}
    ~Level();
 
@@ -53,16 +53,26 @@ private:
 private:
 
    unsigned       numberOfTiles;                // Total number of tiles in level
-   unsigned       numberOfSwitchTiles;          // Total number of switch tiles in level
-   unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
-   unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
-   unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
    sf::Vector2f   *tilePositions;
    sf::Color      *tileColors1;
    sf::Color      *tileColors2;
    Tile::Type     *tileTypes;
    bool           *tileStates;
    LevelTile      **levelTiles;                 // Array of pointers for derived tile types (create array with 'new')
+
+private:
+
+   unsigned       numberOfSwitchTiles;
+   unsigned       *switchTileIndexes;           // Tile indexes of the switch tiles
+   unsigned       *numberOfSwitchedTiles;       // Total number of affected ("switched") tiles for each switch tile
+   unsigned       **switchedTileIndexes;        // Switched tile indexes for all switch tiles (2D array)
+
+private:
+
+   unsigned       numberOfGateTiles;
+   unsigned       *gateTileIndexes;             // Tile indexes of the gate tiles
+   unsigned       *gateTileLevelDestinations;
+   sf::Vector2f   *gateTilePositionDestinations;
 
 private:
 

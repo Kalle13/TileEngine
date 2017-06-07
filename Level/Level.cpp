@@ -23,6 +23,10 @@ Level::~Level()
    delete[] switchedTileIndexes;
    delete[] switchTileIndexes;
    delete[] numberOfSwitchedTiles;       // Delete this after switchedTileIndexes 2D array
+
+   delete[] gateTileIndexes;
+   delete[] gateTileLevelDestinations;
+   delete[] gateTilePositionDestinations;
 }
 
 bool Level::ChangeLevel(unsigned nextLevelNumber)
@@ -35,6 +39,7 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
       delete[] entityRadii;
       delete[] entityTypes;
       delete[] levelEntities;
+
       delete[] tilePositions;
       delete[] tileColors1;
       delete[] tileColors2;
@@ -52,6 +57,9 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
       }
       delete[] switchedTileIndexes;
 
+      delete[] gateTileIndexes;
+      delete[] gateTileLevelDestinations;
+      delete[] gateTilePositionDestinations;
    }
 
    // Set level number
@@ -61,6 +69,13 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
       numberOfEntities = 1;
       numberOfTiles = 4;
       numberOfSwitchTiles = 1;
+      numberOfGateTiles = 1;
+      break;
+   case 1:
+      numberOfEntities = 1;
+      numberOfTiles = 4;
+      numberOfSwitchTiles = 1;
+      numberOfGateTiles = 1;
       break;
    default:
       numberOfEntities = 0;
@@ -85,6 +100,10 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    switchTileIndexes       = new unsigned[numberOfSwitchTiles];
    numberOfSwitchedTiles   = new unsigned[numberOfSwitchTiles];
    switchedTileIndexes     = new unsigned*[numberOfSwitchTiles];
+
+   gateTileIndexes               = new unsigned[numberOfGateTiles];
+   gateTileLevelDestinations     = new unsigned[numberOfGateTiles];
+   gateTilePositionDestinations  = new sf::Vector2f[numberOfGateTiles];
 
    if(numberOfTiles>0){
       switch(levelNumber)
@@ -126,7 +145,65 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
          switchTileIndexes[0]       = 2;                       // Because the tile with index=2 is a switch tile
          numberOfSwitchedTiles[0]   = 3;                       // Because the switch tile with index=2 will control 1 Gate tile
 
-         {                                                     // New scope for tempSwitchedTileIndexes 2D array
+         gateTileIndexes[0]               = 3;                 // Tile indexes of the gate tiles
+         gateTileLevelDestinations[0]     = 1;
+         gateTilePositionDestinations[0]  = sf::Vector2f(64,64);
+
+         {                                                       // New scope for tempSwitchedTileIndexes 2D array
+            //unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
+            unsigned tempSwitchedTileIndexes[1][3] = {{0,1,3}};
+
+            for(unsigned i=0;i<numberOfSwitchTiles;++i){
+               switchedTileIndexes[i] = new unsigned[numberOfSwitchedTiles[i]];
+
+               for(unsigned j=0;j<numberOfSwitchedTiles[i];++j){
+                  switchedTileIndexes[i][j] = tempSwitchedTileIndexes[i][j];
+               }
+            }
+         }
+         break;
+      case 1:
+         entityPositions[0] = sf::Vector2f(64,64);
+
+         entityColors[0]   = sf::Color(204,102,0);
+
+         entityRadii[0]    = 16.0;
+
+         entityTypes[0]    = _Entity::Player;
+
+         tilePositions[0]  = sf::Vector2f(64,64);
+         tilePositions[1]  = sf::Vector2f(96,64);
+         tilePositions[2]  = sf::Vector2f(64,96);
+         tilePositions[3]  = sf::Vector2f(96,96);
+
+         tileColors1[0]    = sf::Color::White;
+         tileColors1[1]    = sf::Color::White;
+         tileColors1[2]    = sf::Color::White;
+         tileColors1[3]    = sf::Color::White;
+
+         tileColors2[0]    = sf::Color::Red;
+         tileColors2[1]    = sf::Color::Red;   // Grey?
+         tileColors2[2]    = sf::Color::Red;
+         tileColors2[3]    = sf::Color::Red;
+
+         tileTypes[0]      = Tile::Base;
+         tileTypes[1]      = Tile::Wall;
+         tileTypes[2]      = Tile::Switch;
+         tileTypes[3]      = Tile::Gate;
+
+         tileStates[0]     = false;
+         tileStates[1]     = false;
+         tileStates[2]     = false;
+         tileStates[3]     = false;
+
+         switchTileIndexes[0]       = 2;                       // Because the tile with index=2 is a switch tile
+         numberOfSwitchedTiles[0]   = 3;                       // Because the switch tile with index=2 will control 1 Gate tile
+
+         gateTileIndexes[0]               = 3;                 // Tile indexes of the gate tiles
+         gateTileLevelDestinations[0]     = 0;
+         gateTilePositionDestinations[0]  = sf::Vector2f(32,32);
+
+         {                                                       // New scope for tempSwitchedTileIndexes 2D array
             //unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
             unsigned tempSwitchedTileIndexes[1][3] = {{0,1,3}};
 
@@ -152,7 +229,15 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    for(unsigned i=0;i<numberOfTiles;++i){
       levelTiles[i] = tileFactory.GetLevelTile(tileTypes[i],i,tilePositions[i],tileColors1[i],tileColors2[i],tileStates[i]);
    }
-
+/*// Trying to set gate tile level and position destinations
+      for(unsigned j=0;j<numberOfGateTiles;++j){
+            LevelTile::FunctionPtr (SetGateLevelDestinationPtr)(unsigned) = &GateTile::SetLevelDestination;
+            void (*LevelTile::SetGatePositionDestinationPtr)(sf::Vector2f) = &GateTile::SetLocationDestination;
+            (levelTiles[gateTileIndexes[j]]->SetGateLevelDestinationPtr)(gateTileLevelDestinations[j]);
+            (levelTiles[gateTileIndexes[j]]->SetGatePositionDestinationPtr)(gateTileLevelDestinations[j]);
+         }
+      }
+*/
    return true;
 }
 
