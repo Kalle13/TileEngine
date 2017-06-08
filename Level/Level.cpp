@@ -145,10 +145,6 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
          switchTileIndexes[0]       = 2;                       // Because the tile with index=2 is a switch tile
          numberOfSwitchedTiles[0]   = 3;                       // Because the switch tile with index=2 will control 1 Gate tile
 
-         gateTileIndexes[0]               = 3;                 // Tile indexes of the gate tiles
-         gateTileLevelDestinations[0]     = 1;
-         gateTilePositionDestinations[0]  = sf::Vector2f(64,64);
-
          {                                                       // New scope for tempSwitchedTileIndexes 2D array
             //unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
             unsigned tempSwitchedTileIndexes[1][3] = {{0,1,3}};
@@ -161,6 +157,11 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
                }
             }
          }
+
+         gateTileIndexes[0]               = 3;                    // Tile indexes of the gate tiles
+         gateTileLevelDestinations[0]     = 1;
+         gateTilePositionDestinations[0]  = sf::Vector2f(64,64);
+
          break;
       case 1:
          entityPositions[0] = sf::Vector2f(64,64);
@@ -199,10 +200,6 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
          switchTileIndexes[0]       = 2;                       // Because the tile with index=2 is a switch tile
          numberOfSwitchedTiles[0]   = 3;                       // Because the switch tile with index=2 will control 1 Gate tile
 
-         gateTileIndexes[0]               = 3;                 // Tile indexes of the gate tiles
-         gateTileLevelDestinations[0]     = 0;
-         gateTilePositionDestinations[0]  = sf::Vector2f(32,32);
-
          {                                                       // New scope for tempSwitchedTileIndexes 2D array
             //unsigned tempSwitchedTileIndexes[1][1] = {{3}};    // 2D array with index=3 of Gate tile that Switch tile with index=2 will control
             unsigned tempSwitchedTileIndexes[1][3] = {{0,1,3}};
@@ -215,6 +212,11 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
                }
             }
          }
+
+         gateTileIndexes[0]               = 3;                    // Tile indexes of the gate tiles
+         gateTileLevelDestinations[0]     = 0;
+         gateTilePositionDestinations[0]  = sf::Vector2f(32,32);
+
          break;
       default:
          return false;
@@ -229,15 +231,7 @@ bool Level::ChangeLevel(unsigned nextLevelNumber)
    for(unsigned i=0;i<numberOfTiles;++i){
       levelTiles[i] = tileFactory.GetLevelTile(tileTypes[i],i,tilePositions[i],tileColors1[i],tileColors2[i],tileStates[i]);
    }
-/*// Trying to set gate tile level and position destinations
-      for(unsigned j=0;j<numberOfGateTiles;++j){
-            LevelTile::FunctionPtr (SetGateLevelDestinationPtr)(unsigned) = &GateTile::SetLevelDestination;
-            void (*LevelTile::SetGatePositionDestinationPtr)(sf::Vector2f) = &GateTile::SetLocationDestination;
-            (levelTiles[gateTileIndexes[j]]->SetGateLevelDestinationPtr)(gateTileLevelDestinations[j]);
-            (levelTiles[gateTileIndexes[j]]->SetGatePositionDestinationPtr)(gateTileLevelDestinations[j]);
-         }
-      }
-*/
+
    return true;
 }
 
@@ -299,5 +293,26 @@ bool Level::CheckLevelForWalls(sf::Vector2f entityPositionWithOffset)
       }
    }
    if(noTileFound) return true;  // entity position with offset is off of the level/map
+   return false;
+}
+
+bool Level::CheckLevelForGateTile(Entity &entity)
+{
+   sf::Vector2f entityPosition = entity.GetPosition();
+
+   // Compare entity position with all level tiles to see if it is on a gate tile
+   for(unsigned i=0;i<numberOfTiles;++i){
+      if((entityPosition == levelTiles[i]->GetTilePosition()) && (levelTiles[i]->GetTileType() == Tile::Gate) && (levelTiles[i]->GetTileState())){
+         for(unsigned j=0;j<numberOfGateTiles;++j){
+            if(i == gateTileIndexes[j]){
+               levelNumber = gateTileLevelDestinations[j];
+               entity.SetPosition(gateTilePositionDestinations[j]);
+               return true;   // return true because a gate tile was found
+            }
+         }
+      }
+   }
+
+   // return false because a gate tile was not found
    return false;
 }

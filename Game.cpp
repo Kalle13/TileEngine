@@ -5,6 +5,9 @@ Game::Game()
    printf("Game constructor\n");
    numberOfEntities = 0;
    timeAcc = 0;
+   timeAccGameLogic = 0;
+   gameInitFlag = false;
+   gateTileFound = false;
 }
 
 Game::~Game()
@@ -68,13 +71,14 @@ void Game::ProcessEvents()
 
 void Game::Update(float deltaT)
 {
-   if(level.GetLevelNumber() != 0){
-      level.ChangeLevel(0);
+   if(!gameInitFlag){
+      level.ChangeLevel(1);
       InitEntities();
+      gameInitFlag = true;
    }
 
    timeAcc += deltaT;
-   GameLogic(0);
+   GameLogic(deltaT);
 
    userInput.UpdateKeyStates();
 }
@@ -84,7 +88,23 @@ void Game::GameLogic(float deltaT)
    // Need to read gameInputFlags that were set in userInput.HandleInput() and respond accordingly
    // Check whether each input is a valid move before moving the player Entity
 
+   timeAccGameLogic += deltaT;
+
    unsigned gameInputs = userInput.GetGameInputFlags();
+
+   if(gateTileFound && timeAccGameLogic <= 0.1){
+      gameInputs = 0;
+   } else if (gateTileFound && timeAccGameLogic > 0.1){
+      gameInputs = 0;
+      gateTileFound = false;
+      printf("Do we get here?\n");
+      level.ChangeLevel(level.GetLevelNumber());      // Level number is updated in the Level::CheckLevelForGateTile() function
+      printf("Or here?\n");
+      InitEntities();
+      printf("Or here?\n");
+      entity[0].UpdateEntity();
+      printf("Then what is the problem?\n");
+   }
 
    sf::Vector2f currentEntityPosition = entity[0].GetPosition();
 
@@ -100,6 +120,12 @@ void Game::GameLogic(float deltaT)
    if(gameInputs & _UserInput::Use)                         level.ToggleLevelTiles(entity[0].GetPosition(),true);
 
    entity[0].UpdateEntity();
+
+   if(level.CheckLevelForGateTile(entity[0])){
+      gateTileFound = true;
+      timeAccGameLogic = 0;
+   }
+
 }
 
 

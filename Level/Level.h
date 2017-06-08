@@ -23,7 +23,7 @@ public:
 
    unsigned    GetLevelNumber()           {return levelNumber;}
    unsigned    GetLevelNumberOfEntites()  {return numberOfEntities;}
-   bool        GetEntityData(unsigned entityIndex, Entity &entity);
+   bool        GetEntityData(unsigned entityIndex, Entity &entity);     // Used in Game::InitEntities() to obtain game entity data from the Level class level data
    //void      DeleteEntityData();  // Function to delete level entity data after it has been used by Game class to initialize entities (level does not need to store this information anymore)
 
    // Functions to change levels
@@ -32,6 +32,7 @@ public:
    // Tile-related functions
    void        ToggleLevelTiles(sf::Vector2f entityPosition, bool useKeyPressed);
    bool        CheckLevelForWalls(sf::Vector2f entityPositionWithOffset);
+   bool        CheckLevelForGateTile(Entity &entity);   // Return the next level number, or the current level number
 
 public:
 

@@ -17,11 +17,14 @@ class Game
 public:
 
    unsigned numberOfEntities;
+   bool gameInitFlag;
+   bool gateTileFound;  // There would have to be one of these flags for every entity that can use gates
    sf::RenderWindow window;
    UserInput userInput;
    Level level;
 
    float timeAcc;
+   float timeAccGameLogic;
 
    // Replace this with an EntityManager class that holds all Entity instances (similar to Level->LevelTiles hierarchy)
    Entity *entity;
